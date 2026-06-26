@@ -2,10 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main # 确保这里是你主分支的名字，通常是 main 或 master
+    branches: [ main ]
 
-# 设置 GITHUB_TOKEN 的权限，允许写入 gh-pages 分支
 permissions:
   contents: write
 
@@ -14,21 +12,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v4 # 使用 v4 版本，解决你截图里的 Node.js 警告
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js ⚙️
+      - name: Setup Node.js 24 💻
         uses: actions/setup-node@v4
         with:
-          node-version: 18 # 或者你用 20 也可以
+          node-version: '24'
+          cache: 'npm'
 
-      - name: Install dependencies 📦
+      - name: Install Dependencies 📦
         run: npm install
 
-      - name: Build project 🏗️
+      - name: Build Project 🏗️
         run: npm run build
 
       - name: Deploy to GitHub Pages 🚀
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} # 这一行最关键！
-          publish_dir: ./dist # Vite 打包后的文件夹通常是 dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
